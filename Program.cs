@@ -191,14 +191,14 @@ namespace Rummy500
                                     {
                                         if(!foundWords.Any(it => it.Item1 == possibleAnswer && it.Item2 >= score))
                                         {
-                                            foundWords.Add((possibleAnswer, score, $"{headerRow[i]}-{headerRow[i + 1]}-{headerRow[i + 2]}-{headerRow[i+3]}-{headerRow[kv.Key]}-{headerRow[kv.Key]}-{headerRow[kv.Key]}"));
+                                            foundWords.Add((possibleAnswer, score, $"{headerRow[kv.Key]}-{headerRow[kv.Key]}-{headerRow[kv.Key]}-{headerRow[i]}-{headerRow[i + 1]}-{headerRow[i + 2]}-{headerRow[i + 3]}"));
                                         }
                                     }
                                     else if (WordCheck(otherAnswer, useSimpleDicto, dictoLib, validSevenLetterWords))
                                     {
                                         if (!foundWords.Any(it => it.Item1 == otherAnswer && it.Item2 >= score))
                                         {
-                                            foundWords.Add((otherAnswer, score, $"{headerRow[kv.Key]}-{headerRow[kv.Key]}-{headerRow[kv.Key]}-{headerRow[i]}-{headerRow[i + 1]}-{headerRow[i + 2]}-{headerRow[i + 3]}"));
+                                            foundWords.Add((otherAnswer, score, $"{headerRow[i]}-{headerRow[i + 1]}-{headerRow[i + 2]}-{headerRow[i + 3]}-{headerRow[kv.Key]}-{headerRow[kv.Key]}-{headerRow[kv.Key]}"));
                                         }
                                     }
                                 }
