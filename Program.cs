@@ -17,7 +17,6 @@ namespace Rummy500
             testRows.Add("SMELONDREDGNI".ToArray());
             testRows.Add("TWAYSQUALCLUN".ToArray());
 
-
             //Setup
             bool testMode = false;
             bool useSimpleDicto = false;
@@ -308,47 +307,12 @@ namespace Rummy500
 
         static char[] BuildRow(List<string> validSevenLetterWords)
         {
-            Dictionary<int, char[]> letterFreq = new Dictionary<int, char[]>() {
-                {120, new char[] {'E' } },
-                {90, new char[] {'T' } },
-                {80, new char[] {'A', 'I', 'N', 'O', 'S' } },
-                {64, new char[] {'H' } },
-                {62, new char[] {'R' } },
-                {44, new char[] {'D' } },
-                {40, new char[] {'L' } },
-                {34, new char[] {'U' } },
-                {30, new char[] {'C', 'M' } },
-                {25, new char[] {'F' } },
-                {20, new char[] {'W', 'Y' } },
-                {17, new char[] {'T' } },
-                {16, new char[] {'B' } },
-                {12, new char[] {'V' } },
-                {8, new char[] {'K' } },
-                {5, new char[] {'Q' } },
-                {4, new char[] {'J', 'X' } },
-                {2, new char[] {'Z' } }
-            };
-
             var sevenChars = "";
             var allSevenLetters = string.Join("", validSevenLetterWords);
             var letterFreqs = allSevenLetters.ToArray().OrderBy(it => it).GroupBy(it => it).Select(it => new { Letter = it.Key, Count = it.Count() });
             foreach(var letterGroup in letterFreqs)
             {
                 sevenChars += String.Concat(Enumerable.Repeat(letterGroup.Letter, letterGroup.Count));
-            }
-
-
-            string chars = "";
-
-            foreach(var kv in letterFreq)
-            {
-                for(int i = 0; i < kv.Key; i++)
-                {
-                    foreach(var ch in kv.Value)
-                    {
-                        chars += ch;
-                    }
-                }
             }
 
             var rando = new Random();
