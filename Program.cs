@@ -104,7 +104,6 @@ namespace Rummy500
                 //3 letter horis and 4 letter verts
                 foreach (var row in rows)
                 {
-                    List<string> foundAnswers = new List<string>();
                     for (int i = 0; i < 11; i++)
                     {
                         var threeCharSeg = new string(row[i..(i + 3)]);
@@ -154,7 +153,6 @@ namespace Rummy500
                 for (int ri = 0; ri < rows.Count(); ri++)
                 {
                     var row = rows[ri];
-                    List<string> foundAnswers = new List<string>();
                     for (int i = 0; i < 10; i++)
                     {
                         var fourCharSeg = new string(row[i..(i + 4)]);
