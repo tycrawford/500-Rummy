@@ -308,12 +308,21 @@ namespace Rummy500
         static char[] BuildRow(List<string> validSevenLetterWords)
         {
             var sevenChars = "";
-            var allSevenLetters = string.Join("", validSevenLetterWords);
-            var letterFreqs = allSevenLetters.ToArray().OrderBy(it => it).GroupBy(it => it).Select(it => new { Letter = it.Key, Count = it.Count() });
-            foreach(var letterGroup in letterFreqs)
-            {
-                sevenChars += String.Concat(Enumerable.Repeat(letterGroup.Letter, letterGroup.Count));
-            }
+
+            string.Join("", validSevenLetterWords)
+                .ToArray()
+                .OrderBy(it => it)
+                .GroupBy(it => it)
+                .Select(it => new
+                {
+                    Letter = it.Key,
+                    Count = it.Count()
+                })
+                .ToList()
+                .ForEach(it =>
+                {
+                    sevenChars += String.Concat(Enumerable.Repeat(it.Letter, it.Count));
+                });
 
             var rando = new Random();
             char[] output = new char[13];
