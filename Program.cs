@@ -162,7 +162,7 @@ namespace Rummy500
                             Dictionary<int, List<string>> dicto = new Dictionary<int, List<string>>();
                             for (int c = 0; c < 13; c++)
                             {
-                                if (c != i && c != i + 1 && c != 2 && c != i + 3)
+                                if ((c != i) && (c != i + 1) && (c != i + 2) && (c != i + 3))
                                 {
                                     var colChars = (rows.Select(it => it[c]).ToArray());
                                     dicto.Add(c, verticalPermutationsThree(colChars));
