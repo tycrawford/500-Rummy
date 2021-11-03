@@ -178,6 +178,88 @@ namespace Rummy500
                     Console.WriteLine(suitCol[i] + " " + string.Join(" ", row));
                 }
 
+                if (useTries)
+                {
+                    for (int ri = 0; ri < rows.Count(); ri++)
+                    {
+                        var row = rows[ri];
+                        for (int i = 0; i < 11; i++)
+                        {
+                            string threeCharStarter = new string(row[i..(i + 3)]);
+                            if (sevenTries.IsWord(threeCharStarter))
+                            {
+                                //check permutations of vert 4 enders
+                                for(int c = 0; c < 13; c++)
+                                {
+                                    if (c != i && c != i + 1 && c != i + 2) //we need a full empty column
+                                    {
+                                        var colCars = rows.Select(it => it[c]).ToArray();
+                                        foreach(var perm in verticalPermutationsFour(colCars)) //maybe call a distinct and save lines?
+                                        {
+                                            var word = threeCharStarter + perm;
+                                            if (sevenTries.IsWord(word))
+                                            {
+                                                var score = (IndexToScore(i) + IndexToScore(i + 1) + IndexToScore(i + 2) + (4 * IndexToScore(c)));
+                                                var area = $"{headerRow[i]}-{headerRow[i + 1]}-{headerRow[i + 2]}-{headerRow[c]}-{headerRow[c]}-{headerRow[c]}-{headerRow[c]}";
+                                                foundWords.Add((word, score, area));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (i < 10)
+                            {
+                                string fourCharStarter =  new string(row[i..(i + 4)]);
+                                if (sevenTries.IsWord(fourCharStarter))
+                                {
+                                    //check permutations of vert 3 enders
+                                    Dictionary<int, List<string>> dicto = new Dictionary<int, List<string>>();
+                                    for (int c = 0; c < 13; c++)
+                                    {
+                                        if ((c != i) && (c != i + 1) && (c != i + 2) && (c != i + 3))
+                                        {
+                                            var colChars = (rows.Select(it => it[c]).ToArray());
+                                            foreach(var perm in verticalPermutationsThree(colChars))
+                                            {
+                                                var word = fourCharStarter + perm;
+                                                if (sevenTries.IsWord(word))
+                                                {
+                                                    var score = (IndexToScore(i) + IndexToScore(i + 1) + IndexToScore(i + 2) + IndexToScore(i + 3) + (3 * IndexToScore(c)));
+                                                    var area = $"{headerRow[i]}-{headerRow[i + 1]}-{headerRow[i + 2]}-{headerRow[i + 3]}-{headerRow[c]}-{headerRow[c]}-{headerRow[c]}";
+                                                    foundWords.Add((word, score, area));
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var list = new List<char[]>();
+                                            for (int r = 0; r < rows.Count(); r++)
+                                            {
+                                                if (r != ri)
+                                                {
+                                                    list.Add(rows[r]);
+                                                }
+                                            }
+                                            var colChars = list.Select(it => it[c]).ToArray();
+                                            foreach (var perm in verticalPermutationsThree(colChars))
+                                            {
+                                                var word = fourCharStarter + perm;
+                                                if (sevenTries.IsWord(word))
+                                                {
+                                                    var score = (IndexToScore(i) + IndexToScore(i + 1) + IndexToScore(i + 2) + IndexToScore(i + 3) + (3 * IndexToScore(c)));
+                                                    var area = $"{headerRow[i]}-{headerRow[i + 1]}-{headerRow[i + 2]}-{headerRow[i + 3]}-{headerRow[c]}-{headerRow[c]}-{headerRow[c]}";
+                                                    foundWords.Add((word, score, area));
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 //SOLVER
                 //3 letter horis and 4 letter verts
                 foreach (var row in rows)
@@ -186,7 +268,7 @@ namespace Rummy500
                     {
                         var threeCharSeg = new string(row[i..(i + 3)]);
 
-                        if (useSimpleDicto || validSevenLetterWords.Any(it => it.StartsWith(threeCharSeg) || it.EndsWith(threeCharSeg)))
+                        if (validSevenLetterWords.Any(it => it.EndsWith(threeCharSeg)))
                         {
                             Dictionary<int, List<string>> dicto = new Dictionary<int, List<string>>();
                             for (int c = 0; c < 13; c++)
@@ -235,7 +317,7 @@ namespace Rummy500
                     {
                         var fourCharSeg = new string(row[i..(i + 4)]);
 
-                        if (useSimpleDicto || validSevenLetterWords.Any(it => it.StartsWith(fourCharSeg) || it.EndsWith(fourCharSeg)))
+                        if (useSimpleDicto || validSevenLetterWords.Any(it => it.EndsWith(fourCharSeg)))
                         {
                             Dictionary<int, List<string>> dicto = new Dictionary<int, List<string>>();
                             for (int c = 0; c < 13; c++)
