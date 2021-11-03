@@ -290,7 +290,7 @@ namespace Rummy500
                     {
                         var threeCharSeg = new string(row[i..(i + 3)]);
 
-                        if (validSevenLetterWords.Any(it => it.EndsWith(threeCharSeg)))
+                        if (validSevenLetterWords.Any(it => it.EndsWith(threeCharSeg) || (!useTries && it.StartsWith(threeCharSeg))))
                         {
                             Dictionary<int, List<string>> dicto = new Dictionary<int, List<string>>();
                             for (int c = 0; c < 13; c++)
@@ -339,7 +339,7 @@ namespace Rummy500
                     {
                         var fourCharSeg = new string(row[i..(i + 4)]);
 
-                        if (useSimpleDicto || validSevenLetterWords.Any(it => it.EndsWith(fourCharSeg)))
+                        if (useSimpleDicto || validSevenLetterWords.Any(it => it.EndsWith(fourCharSeg) || (!useTries && it.StartsWith(fourCharSeg))))
                         {
                             Dictionary<int, List<string>> dicto = new Dictionary<int, List<string>>();
                             for (int c = 0; c < 13; c++)
