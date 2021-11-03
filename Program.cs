@@ -206,14 +206,14 @@ namespace Rummy500
                                     var otherAnswer = $"{fourChar}{threeCharSeg}";
                                     var score = (IndexToScore(i) + IndexToScore(i + 1) + IndexToScore(i + 2) + (4 * IndexToScore(kv.Key)));
                                     
-                                    if (WordCheck(possibleAnswer, useSimpleDicto, dictoLib, validSevenLetterWords))
+                                    if (WordCheck(possibleAnswer, useSimpleDicto, dictoLib, validSevenLetterWords, useTries, sevenTries))
                                     {
                                         if (!foundWords.Any(it => it.Item1 == possibleAnswer && it.Item2 >= score))
                                         {
                                             foundWords.Add((possibleAnswer, score, $"{headerRow[i]}-{headerRow[i+1]}-{headerRow[i+2]}-{headerRow[kv.Key]}-{headerRow[kv.Key]}-{headerRow[kv.Key]}-{headerRow[kv.Key]}"));
                                         }
                                     }
-                                    else if (WordCheck(otherAnswer, useSimpleDicto, dictoLib, validSevenLetterWords))
+                                    else if (WordCheck(otherAnswer, useSimpleDicto, dictoLib, validSevenLetterWords, useTries, sevenTries))
                                     {
                                         if (!foundWords.Any(it => it.Item1 == otherAnswer && it.Item2 >= score))
                                         {
@@ -266,13 +266,14 @@ namespace Rummy500
                                     var otherAnswer = $"{fourCharSeg}{threeChar}";
                                     var score = (IndexToScore(i) + IndexToScore(i + 1) + IndexToScore(i + 2) + IndexToScore(i + 3) + (3 * IndexToScore(kv.Key)));
                                     if (WordCheck(possibleAnswer, useSimpleDicto, dictoLib, validSevenLetterWords))
+                                    if (WordCheck(possibleAnswer, useSimpleDicto, dictoLib, validSevenLetterWords, useTries, sevenTries))
                                     {
                                         if(!foundWords.Any(it => it.Item1 == possibleAnswer && it.Item2 >= score))
                                         {
                                             foundWords.Add((possibleAnswer, score, $"{headerRow[kv.Key]}-{headerRow[kv.Key]}-{headerRow[kv.Key]}-{headerRow[i]}-{headerRow[i + 1]}-{headerRow[i + 2]}-{headerRow[i + 3]}"));
                                         }
                                     }
-                                    else if (WordCheck(otherAnswer, useSimpleDicto, dictoLib, validSevenLetterWords))
+                                    else if (WordCheck(otherAnswer, useSimpleDicto, dictoLib, validSevenLetterWords, useTries, sevenTries))
                                     {
                                         if (!foundWords.Any(it => it.Item1 == otherAnswer && it.Item2 >= score))
                                         {
@@ -413,7 +414,7 @@ namespace Rummy500
             return output;
         }
 
-        static bool WordCheck(string input, bool useSimpleDicto, DictionaryLib.DictionaryLib simpleDicto, List<string> validSevenLetterWords)
+        static bool WordCheck(string input, bool useSimpleDicto, DictionaryLib.DictionaryLib simpleDicto, List<string> validSevenLetterWords, bool useTries, Trie tries)
         {
             if (useSimpleDicto)
             {
@@ -424,11 +425,19 @@ namespace Rummy500
                 catch (Exception ex)
                 {
                     simpleDicto = new DictionaryLib.DictionaryLib(DictionaryType.Small);
+                    if (useTries)
+                    {
+                        return tries.IsWord(input);
+                    }
                     return validSevenLetterWords.Contains(input);
                 }
             }
             else
             {
+                if (useTries)
+                {
+                    return tries.IsWord(input);
+                }
                 return validSevenLetterWords.Contains(input);
             }
         }
