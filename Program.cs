@@ -69,13 +69,34 @@ namespace Rummy500
 
         public bool IsWord(string word)
         {
-            return Root.Edges.ContainsKey(word[0])
-                && Root.Edges[word[0]].Edges.ContainsKey(word[1])
-                && Root.Edges[word[0]].Edges[word[1]].Edges.ContainsKey(word[2]) && word.Length > 3
-                && Root.Edges[word[0]].Edges[word[1]].Edges[word[2]].Edges.ContainsKey(word[3]) && word.Length > 4
-                && Root.Edges[word[0]].Edges[word[1]].Edges[word[2]].Edges[word[3]].Edges.ContainsKey(word[4])
-                && Root.Edges[word[0]].Edges[word[1]].Edges[word[2]].Edges[word[3]].Edges[word[4]].Edges.ContainsKey(word[5])
-                && Root.Edges[word[0]].Edges[word[1]].Edges[word[2]].Edges[word[3]].Edges[word[4]].Edges[word[5]].Edges.ContainsKey(word[6]);
+            bool CheckThree(string threeSeg)
+            {
+                return Root.Edges.ContainsKey(word[0])
+                   && Root.Edges[word[0]].Edges.ContainsKey(word[1])
+                   && Root.Edges[word[0]].Edges[word[1]].Edges.ContainsKey(word[2]);
+            }
+            bool checkFour(string fourSeg)
+            {
+                return CheckThree(fourSeg)
+                    && Root.Edges[word[0]].Edges[word[1]].Edges[word[2]].Edges.ContainsKey(word[3]);
+            }
+            bool checkSeven(string sevenSeg)
+            {
+                return checkFour(sevenSeg)
+                    && Root.Edges[word[0]].Edges[word[1]].Edges[word[2]].Edges[word[3]].Edges.ContainsKey(word[4])
+                    && Root.Edges[word[0]].Edges[word[1]].Edges[word[2]].Edges[word[3]].Edges[word[4]].Edges.ContainsKey(word[5])
+                    && Root.Edges[word[0]].Edges[word[1]].Edges[word[2]].Edges[word[3]].Edges[word[4]].Edges[word[5]].Edges.ContainsKey(word[6]);
+            }
+            if (word.Length < 4)
+            {
+                return CheckThree(word);
+            } else if (word.Length < 5)
+            {
+                return checkFour(word);
+            } else
+            {
+                return checkSeven(word);
+            }
         }
     }
     class Program
