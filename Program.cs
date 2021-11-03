@@ -145,6 +145,7 @@ namespace Rummy500
             var timer = new System.Diagnostics.Stopwatch();
             timer.Start();
             int totalRuns = 0;
+            int avgScore = 0;
             while (topScore < 1000)
             {
                 totalRuns++;
@@ -389,6 +390,7 @@ namespace Rummy500
                     }
                 }
                 var thisScore = foundWords.Sum(it => it.Item2);
+                avgScore += thisScore;
                 if (thisScore > topScore)
                 {
                     topScore = thisScore;
@@ -401,6 +403,7 @@ namespace Rummy500
             timer.Stop();
             Console.WriteLine($"Elapsed time: {timer.Elapsed}");
             Console.WriteLine($"{timer.Elapsed} / {totalRuns} Tries = {timer.Elapsed / totalRuns} avg run time");
+            Console.WriteLine($"Average Score: {avgScore / totalRuns}");
         }
 
         static List<string> verticalPermutationsFour(char[] column)
