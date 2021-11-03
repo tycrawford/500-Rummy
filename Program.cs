@@ -121,8 +121,12 @@ namespace Rummy500
 
             var sevenTries = new Trie(validSevenLetterWords.ToArray());
             Console.WriteLine($"Bananas Test = {sevenTries.IsWord("BANANAS")}");
+            var timer = new System.Diagnostics.Stopwatch();
+            timer.Start();
+            int totalRuns = 0;
             while (topScore < 1000)
             {
+                totalRuns++;
                 List<(string, int, string)> foundWords = new List<(string, int, string)>();
                 List<char[]> rows = new List<char[]>();
                 if (testMode)
@@ -290,6 +294,9 @@ namespace Rummy500
                 foundWords.ForEach(it => Console.WriteLine($"{it.Item2} - {it.Item1} - {it.Item3}"));
                 Console.WriteLine($"Score - {thisScore}");
             }
+            timer.Stop();
+            Console.WriteLine($"Elapsed time: {timer.Elapsed}");
+            Console.WriteLine($"{timer.Elapsed} / {totalRuns} Tries = {timer.Elapsed / totalRuns} avg run time");
         }
 
         static List<string> verticalPermutationsFour(char[] column)
