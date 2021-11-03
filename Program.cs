@@ -7,6 +7,77 @@ using DictionaryLib;
 
 namespace Rummy500
 {
+    //Borrowed from Fantius's answer on Stack q# 6416050
+    public class Trie
+    {
+        public struct Letter
+        {
+            public const string Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            public int Index;
+
+            public static implicit operator Letter(char c)
+            {
+                return new Letter() { Index = Chars.IndexOf(c) };
+            }
+
+            public char ToChar()
+            {
+                return Chars[Index];
+            }
+
+            public override string ToString()
+            {
+                return Chars[Index].ToString();
+            }
+        }
+
+        public class Node
+        {
+            public string Word;
+            public bool IsTerminal
+            {
+                get => Word != null;
+            }
+            public Dictionary<char, Node> Edges = new Dictionary<char, Node>();
+        }
+
+        public Node Root = new Node();
+        
+        public Trie(string[] words)
+        {
+            for (int i = 0; i < words.Length; i++)
+            {
+                var word = words[i];
+                var node = Root;
+                for (int j = 1; j <= word.Length; j++)
+                {
+                    var letter = word[j - 1];
+                    Node next;
+                    if (!node.Edges.TryGetValue(letter, out next))
+                    {
+                        next = new Node();
+                        if( j == word.Length)
+                        {
+                            next.Word = word;
+                        }
+                        node.Edges.Add(letter, next);
+                    }
+                    node = next;
+                }
+            }
+        }
+
+        public bool IsWord(string word)
+        {
+            return Root.Edges.ContainsKey(word[0])
+                && Root.Edges[word[0]].Edges.ContainsKey(word[1])
+                && Root.Edges[word[0]].Edges[word[1]].Edges.ContainsKey(word[2]) && word.Length > 3
+                && Root.Edges[word[0]].Edges[word[1]].Edges[word[2]].Edges.ContainsKey(word[3]) && word.Length > 4
+                && Root.Edges[word[0]].Edges[word[1]].Edges[word[2]].Edges[word[3]].Edges.ContainsKey(word[4])
+                && Root.Edges[word[0]].Edges[word[1]].Edges[word[2]].Edges[word[3]].Edges[word[4]].Edges.ContainsKey(word[5])
+                && Root.Edges[word[0]].Edges[word[1]].Edges[word[2]].Edges[word[3]].Edges[word[4]].Edges[word[5]].Edges.ContainsKey(word[6]);
+        }
+    }
     class Program
     {
         static void Main(string[] args)
@@ -20,6 +91,7 @@ namespace Rummy500
             //Setup
             bool testMode = false;
             bool useSimpleDicto = false;
+            bool useTries = true;
             List<string> validSevenLetterWords = new List<string>();
             string filePath = "..\\..\\..\\words.txt";
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
@@ -47,6 +119,8 @@ namespace Rummy500
 
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
+            var sevenTries = new Trie(validSevenLetterWords.ToArray());
+            Console.WriteLine($"Bananas Test = {sevenTries.IsWord("BANANAS")}");
             while (topScore < 1000)
             {
                 List<(string, int, string)> foundWords = new List<(string, int, string)>();
